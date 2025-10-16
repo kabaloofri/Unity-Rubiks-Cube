@@ -8,21 +8,9 @@ public class RubixCube : MonoBehaviour
     public GameObject edges;
     public GameObject centers;
 
-    public string whatIsCorners;
-    public string whatIsEdges;
-    public string whatIsCenters;
-
-    public Vector3 boxSize = new Vector3(4,0.5f,4);
-
-    private Transform rotator;
-    
-
-    void Start()
-    {
-        rotator = new GameObject("rotator").transform;
-        rotator.position = transform.position;
-    }
-
+    public LayerMask whatIsCorners;
+    public LayerMask whatIsEdges;
+    public LayerMask whatIsCenters;
     void Update()
     {
         bool reverse = Input.GetKey(KeyCode.Space);
@@ -30,87 +18,65 @@ public class RubixCube : MonoBehaviour
         {
             U(reverse);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            D();
+            D(reverse);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            L();
+            L(reverse);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            R();
+            R(reverse);
         }
     }
 
     void U(bool reverse=false)
     {
-        var rotation = reverse ? new Vector3(0, -90, 0) : new Vector3(0, 90 ,0);
-        RotateCube(new Vector3(0, 1.5f, 0), Vector3.zero, rotation);
+        var top = GameObject.Find("top").GetComponent<RotateSide>();
+
+        SortPiecesToParents(top.rotate(reverse));
     }
     void D(bool reverse=false)
     {
-        var rotation = reverse ? new Vector3(0, -90, 0) : new Vector3(0, 90 ,0);
-        RotateCube(new Vector3(0, -1.5f, 0), Vector3.zero, rotation);
+        var bottom = GameObject.Find("bottom").GetComponent<RotateSide>();
+
+        SortPiecesToParents(bottom.rotate(reverse));
     }
-    void L()
+    void L(bool reverse=false)
     {
-        RotateCube(new Vector3(0, 0, 2), new Vector3(90, 0,0), new Vector3(90, 90, 0));
+        var right = GameObject.Find("right").GetComponent<RotateSide>();
+
+        SortPiecesToParents(right.rotate(reverse));
     }
-    void R()
+    void R(bool reverse=false)
     {
-        RotateCube(new Vector3(0, 0,-2), new Vector3(90,0,0), new Vector3(90, 90, 0));
+        var left = GameObject.Find("left").GetComponent<RotateSide>();
+
+        SortPiecesToParents(left.rotate(reverse));
     }
 
-    
-    void RotateCube(Vector3 center, Vector3 CubeRotation, Vector3 rotation)
-    {
-        var pieces = Physics.OverlapBox(center, boxSize, Quaternion.Euler(CubeRotation));
 
-        for (int i = 0; i < pieces.Length; i++)
-        {
-            pieces[i].transform.parent = rotator.transform;
-        }
-        rotator.transform.Rotate(rotation);
-
-        SortPiecesToParents(pieces);
-    }
     void SortPiecesToParents(Collider[] pieces)
     {
         for (int i = 0; i < pieces.Length; i++)
         {
-            if (pieces[i].gameObject.tag == whatIsCorners)
+            if (pieces[i].gameObject.layer == whatIsCorners)
             {
                 //is corner
                 pieces[i].transform.parent = corners.transform;
             }
-            else if (pieces[i].gameObject.tag == whatIsEdges)
+            else if (pieces[i].gameObject.layer == whatIsEdges)
             {
                 //is edge
                 pieces[i].transform.parent = edges.transform;
             }
-            else if (pieces[i].gameObject.tag == whatIsCenters)
+            else if (pieces[i].gameObject.layer == whatIsCenters)
             {
-                // somthing else, prob centers
+                //prob centers
                 pieces[i].transform.parent = centers.transform;
             }
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        drawBox(Color.yellow, new Vector3(0, 1.5f, 0) / 2, Vector3.zero);
-
-        drawBox(Color.red, new Vector3(0, 0, 2) / 2, new Vector3(90, 0,0));        
-        
-        drawBox(Color.blue, new Vector3(0, 0,-2) / 2, new Vector3(90,0,0));
-    }
-
-    void drawBox(Color color, Vector3 center, Vector3 cubeRotation)
-    {
-        Gizmos.color = color;
-        Gizmos.matrix = Matrix4x4.TRS(center, Quaternion.Euler(cubeRotation), transform.lossyScale);
-        Gizmos.DrawCube(center, boxSize);
     }
 }
