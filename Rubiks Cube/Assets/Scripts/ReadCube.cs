@@ -33,17 +33,9 @@ public class ReadCube : MonoBehaviour
         cubeMap = FindFirstObjectByType<CubeMap>();
     }
 
-    void Update()
-    {
-        ReadState();
-    }
-
 
     public void ReadState()
     {
-        cubeState = FindFirstObjectByType<CubeState>();
-        cubeMap = FindFirstObjectByType<CubeMap>();
-
         cubeState.up = ReadFace(upRays, tUp);
         cubeState.down = ReadFace(downRays, tDown);
         cubeState.left = ReadFace(leftRays, tLeft);
@@ -88,7 +80,7 @@ public class ReadCube : MonoBehaviour
         return rays;
     }
 
-    public List<GameObject> ReadFace(List<GameObject> rayStarts, Transform rayTransform)
+    List<GameObject> ReadFace(List<GameObject> rayStarts, Transform rayTransform)
     {
         List<GameObject> facesHit = new List<GameObject>();
 
@@ -101,7 +93,6 @@ public class ReadCube : MonoBehaviour
             {
                 Debug.DrawRay(ray, rayTransform.forward * hit.distance, Color.yellow);
                 facesHit.Add(hit.collider.gameObject);
-                print(hit.collider.gameObject.name);
             }
             else
             {
