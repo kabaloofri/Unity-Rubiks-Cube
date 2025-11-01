@@ -22,9 +22,21 @@ public class CubeState : MonoBehaviour
                 //place all the faces onto the center face
                 face.transform.parent.parent = cubeSide[4].transform.parent;
             }
+        }
+        print(cubeSide[4].name);
+        //rotate the center piece
+        cubeSide[4].transform.parent.GetComponent<PivotRotation>().Rotate(cubeSide);
+    }
 
-            //rotate the center piece
-            cubeSide[4].transform.parent.GetComponent<PivotRotation>().Rotate(cubeSide);
+    public void PutDown(List<GameObject> cubeSide, Transform pivot)
+    {
+        foreach (var face in cubeSide)
+        {
+            if (face != cubeSide[4])
+            {
+                //place all the faces onto the center face
+                face.transform.parent.parent = pivot;
+            }
         }
     }
 }

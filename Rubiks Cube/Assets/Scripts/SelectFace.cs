@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.IntegerTime;
 using UnityEngine;
 
 public class SelectFace : MonoBehaviour
@@ -23,6 +24,7 @@ public class SelectFace : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 100f, whatIsFaces))
             {
+
                 GameObject face = hit.collider.gameObject;
 
                 var cubeSides = new List<List<GameObject>>()
@@ -41,7 +43,6 @@ public class SelectFace : MonoBehaviour
                     if (cubeSide.Contains(face))
                     {
                         //pick it up
-
                         cubeState.PickUp(cubeSide);
                     }
                 }
