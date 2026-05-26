@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ReadCube : MonoBehaviour
-{
+public class ReadCube : MonoBehaviour {
     public Transform tUp;
     public Transform tDown;
     public Transform tLeft;
@@ -23,19 +22,16 @@ public class ReadCube : MonoBehaviour
     private List<GameObject> downRays = new List<GameObject>();
 
     CubeState cubeState;
-    CubeMap cubeMap;
+    public CubeMap cubeMap;
 
-    void Start()
-    {
+    void Start() {
         SetRayTransforms();
 
-        cubeState = FindFirstObjectByType<CubeState>();
-        cubeMap = FindFirstObjectByType<CubeMap>();
+        cubeState = GetComponent<CubeState>();
     }
 
 
-    public void ReadState()
-    {
+    public void ReadState() {
         cubeState.up = ReadFace(upRays, tUp);
         cubeState.down = ReadFace(downRays, tDown);
         cubeState.left = ReadFace(leftRays, tLeft);
@@ -44,10 +40,9 @@ public class ReadCube : MonoBehaviour
         cubeState.back = ReadFace(backRays, tBack);
 
         cubeMap.Set();
-    } 
+    }
 
-    void SetRayTransforms()
-    {
+    void SetRayTransforms() {
         upRays = BuildRays(tUp, new Vector3(90, 90, 0));
         downRays = BuildRays(tDown, new Vector3(270, 90, 0));
         leftRays = BuildRays(tLeft, new Vector3(0, 180, 0));
@@ -55,15 +50,12 @@ public class ReadCube : MonoBehaviour
         frontRays = BuildRays(tFront, new Vector3(0, 90, 0));
         backRays = BuildRays(tBack, new Vector3(0, 270, 0));
     }
-    List<GameObject> BuildRays(Transform rayTransform, Vector3 direction)
-    {
+    List<GameObject> BuildRays(Transform rayTransform, Vector3 direction) {
         int rayCount = 0;
         var rays = new List<GameObject>();
 
-        for (int y = 1; y > -2; y--)
-        {
-            for (int x = -1; x < 2; x++)
-            {
+        for (int y = 1; y > -2; y--) {
+            for (int x = -1; x < 2; x++) {
                 var startPos = new Vector3(rayTransform.localPosition.x + x,
                         rayTransform.localPosition.y + y,
                         rayTransform.localPosition.z);
@@ -80,22 +72,17 @@ public class ReadCube : MonoBehaviour
         return rays;
     }
 
-    List<GameObject> ReadFace(List<GameObject> rayStarts, Transform rayTransform)
-    {
+    List<GameObject> ReadFace(List<GameObject> rayStarts, Transform rayTransform) {
         List<GameObject> facesHit = new List<GameObject>();
 
-        foreach (var rayStart in rayStarts)
-        {
+        foreach (var rayStart in rayStarts) {
             Vector3 ray = rayStart.transform.position;
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, rayTransform.forward, out hit, 100f, whatIsFaces))
-            {
+            if (Physics.Raycast(ray, rayTransform.forward, out hit, 100f, whatIsFaces)) {
                 Debug.DrawRay(ray, rayTransform.forward * hit.distance, Color.yellow);
                 facesHit.Add(hit.collider.gameObject);
-            }
-            else
-            {
+            } else {
                 Debug.DrawRay(ray, rayTransform.forward * 100, Color.red);
             }
         }

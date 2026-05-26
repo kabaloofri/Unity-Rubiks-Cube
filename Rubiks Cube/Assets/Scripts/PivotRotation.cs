@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PivotRotation : MonoBehaviour
-{
+public class PivotRotation : MonoBehaviour {
     //rotation
     List<GameObject> activeSide;
     Vector3 loacalForward;
@@ -20,30 +19,24 @@ public class PivotRotation : MonoBehaviour
     ReadCube readCube;
     CubeState cubeState;
 
-    void Start()
-    {
+    void Start() {
         readCube = FindFirstObjectByType<ReadCube>();
         cubeState = FindFirstObjectByType<CubeState>();
     }
 
-    void Update()
-    {
-        if (dragging)
-        {
+    void Update() {
+        if (dragging) {
             SpinSide(activeSide);
-            if (Input.GetMouseButtonUp(0))
-            {
+            if (Input.GetMouseButtonUp(0)) {
                 dragging = false;
                 RotateToRightAngle();
             }
         }
-        if (autoRotating)
-        {
+        if (autoRotating) {
             AutoRotate();
         }
     }
-    public void Rotate(List<GameObject> side)
-    {
+    public void Rotate(List<GameObject> side) {
         activeSide = side;
         mouseRef = Input.mousePosition;
         dragging = true;
@@ -53,8 +46,7 @@ public class PivotRotation : MonoBehaviour
         readCube.ReadState();
     }
 
-    void SpinSide(List<GameObject> side)
-    {
+    void SpinSide(List<GameObject> side) {
         rotation = Vector3.zero;
 
         Vector3 mouseOffset = Input.mousePosition - mouseRef;
@@ -64,45 +56,43 @@ public class PivotRotation : MonoBehaviour
         Vector2 pivotOffset = new Vector2(Input.mousePosition.x - PivotScreenPoint.x, Input.mousePosition.y - PivotScreenPoint.y);
         pivotOffset.Normalize();
 
-        float Xdir = Vector2.Dot(Vector2.right, pivotOffset); 
+        float Xdir = Vector2.Dot(Vector2.right, pivotOffset);
         float Ydir = -Vector2.Dot(Vector2.up, pivotOffset);
 
 
-        //strait up comarison no work
-        if (cubeState.front == side)
+        // look for wich side currently moving
+        if (cubeState.front[4] == side[4])
             rotation.x = (mouseOffset.x + mouseOffset.y) * sensitivity * -1;
 
-        if (cubeState.back.Contains(side[4]))
+        if (cubeState.back[4] == side[4])
             rotation.x = (mouseOffset.x + mouseOffset.y) * sensitivity * 1;
 
-        if (cubeState.up.Contains(side[4]))
+        if (cubeState.up[4] == side[4])
             rotation.y = (mouseOffset.x + mouseOffset.y) * sensitivity * 1;
 
-        if (cubeState.down.Contains(side[4]))
+        if (cubeState.down[4] == side[4])
             rotation.y = (mouseOffset.x + mouseOffset.y) * sensitivity * -1;
 
-        if (cubeState.left.Contains(side[4]))
+        if (cubeState.left[4] == side[4])
             rotation.z = (mouseOffset.x + mouseOffset.y) * sensitivity * 1;
 
-        if (cubeState.right.Contains(side[4]))
+        if (cubeState.right[4] == side[4])
             rotation.z = (mouseOffset.x + mouseOffset.y) * sensitivity * -1;
 
 
-        transform.Rotate(rotation, Space.Self);
+        transform.Rotate(rotation, Space.World);
         mouseRef = Input.mousePosition;
     }
 
 
-    void AutoRotate()
-    {
+    void AutoRotate() {
         dragging = false;
 
         var step = speed * Time.deltaTime;
 
         transform.localRotation = Quaternion.RotateTowards(transform.localRotation, targetQuaternion, step);
 
-        if (Quaternion.Angle(transform.localRotation, targetQuaternion) <= 1f)
-        {
+        if (Quaternion.Angle(transform.localRotation, targetQuaternion) <= 1f) {
             transform.localRotation = targetQuaternion;
 
             //unparent the pieces
@@ -113,8 +103,7 @@ public class PivotRotation : MonoBehaviour
         }
     }
 
-    public void RotateToRightAngle()
-    {
+    public void RotateToRightAngle() {
         var vec = transform.localEulerAngles;
         vec.x = Mathf.Round(vec.x / 90) * 90;
         vec.y = Mathf.Round(vec.y / 90) * 90;
@@ -122,5 +111,5 @@ public class PivotRotation : MonoBehaviour
 
         targetQuaternion.eulerAngles = vec;
         autoRotating = true;
-    } 
+    }
 }

@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CubeMap : MonoBehaviour
-{
-    CubeState cubeState;
+public class CubeMap : MonoBehaviour {
+    [SerializeField] private CubeState cubeState;
 
     public Transform up;
     public Transform down;
@@ -13,15 +12,7 @@ public class CubeMap : MonoBehaviour
     public Transform front;
     public Transform back;
 
-    void Start()
-    {
-
-    }
-    
-    public void Set()
-    {
-        cubeState = FindFirstObjectByType<CubeState>();
-
+    public void Set() {
         UpdateMap(cubeState.front, front);
         UpdateMap(cubeState.back, back);
         UpdateMap(cubeState.left, left);
@@ -30,33 +21,25 @@ public class CubeMap : MonoBehaviour
         UpdateMap(cubeState.down, down);
     }
 
-    void UpdateMap(List<GameObject> face, Transform side)
-    {
+    void UpdateMap(List<GameObject> face, Transform side) {
         int i = 0;
-        foreach (Transform map in side)
-        {
-            if (face[i].name[0] == 'F')
-            {
+        foreach (Transform map in side) {
+            if (face[i].name[0] == 'F') {
                 map.GetComponent<Image>().color = new Color(1, 0.5f, 0, 1);
             }
-            if (face[i].name[0] == 'B')
-            {
+            if (face[i].name[0] == 'B') {
                 map.GetComponent<Image>().color = Color.red;
             }
-            if (face[i].name[0] == 'U')
-            {
+            if (face[i].name[0] == 'U') {
                 map.GetComponent<Image>().color = Color.yellow;
             }
-            if (face[i].name[0] == 'D')
-            {
+            if (face[i].name[0] == 'D') {
                 map.GetComponent<Image>().color = Color.white;
             }
-            if (face[i].name[0] == 'L')
-            {
+            if (face[i].name[0] == 'L') {
                 map.GetComponent<Image>().color = Color.green;
             }
-            if (face[i].name[0] == 'R')
-            {
+            if (face[i].name[0] == 'R') {
                 map.GetComponent<Image>().color = Color.blue;
             }
             i++;

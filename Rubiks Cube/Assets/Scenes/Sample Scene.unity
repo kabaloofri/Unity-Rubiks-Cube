@@ -2689,6 +2689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce830ece0ad4d1168dfe1b1af184340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cubeState: {fileID: 1373910527}
   up: {fileID: 426219513}
   down: {fileID: 1987677204}
   left: {fileID: 423023279}
@@ -4314,6 +4315,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   emptyGO: {fileID: 7082851748638479886, guid: 6e588e61493dd6dfb8943fac70d5698e, type: 3}
+  cubeMap: {fileID: 809707126}
 --- !u!114 &1373910527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7049,7 +7051,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2073117254}
   m_Layer: 0
-  m_Name: Rays
+  m_Name: Ray Origins
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
