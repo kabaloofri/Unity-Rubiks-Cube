@@ -28,6 +28,8 @@ public class ReadCube : MonoBehaviour {
         SetRayTransforms();
 
         cubeState = GetComponent<CubeState>();
+        ReadState();
+        cubeState.initialized = true;
     }
 
 

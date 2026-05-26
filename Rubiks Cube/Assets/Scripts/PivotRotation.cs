@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PivotRotation : MonoBehaviour {
     //rotation
@@ -62,16 +63,16 @@ public class PivotRotation : MonoBehaviour {
 
         // look for wich side currently moving
         if (cubeState.front[4] == side[4])
-            rotation.x = (mouseOffset.x + mouseOffset.y) * sensitivity * -1;
-
-        if (cubeState.back[4] == side[4])
             rotation.x = (mouseOffset.x + mouseOffset.y) * sensitivity * 1;
 
+        if (cubeState.back[4] == side[4])
+            rotation.x = (mouseOffset.x + mouseOffset.y) * sensitivity * -1;
+
         if (cubeState.up[4] == side[4])
-            rotation.y = (mouseOffset.x + mouseOffset.y) * sensitivity * 1;
+            rotation.y = (mouseOffset.x + mouseOffset.y) * sensitivity * -1;
 
         if (cubeState.down[4] == side[4])
-            rotation.y = (mouseOffset.x + mouseOffset.y) * sensitivity * -1;
+            rotation.y = (mouseOffset.x + mouseOffset.y) * sensitivity * 1;
 
         if (cubeState.left[4] == side[4])
             rotation.z = (mouseOffset.x + mouseOffset.y) * sensitivity * 1;
@@ -82,6 +83,17 @@ public class PivotRotation : MonoBehaviour {
 
         transform.Rotate(rotation, Space.World);
         mouseRef = Input.mousePosition;
+    }
+
+    public void StartAutoRotate(List<GameObject> side, float angle) {
+        cubeState.PickUp(side);
+        var loacalForward = Vector3.zero - side[4].transform.parent.localPosition;
+        targetQuaternion = Quaternion.AngleAxis(angle, loacalForward) * transform.localRotation;
+
+        activeSide = side;
+        autoRotating = true;
+
+
     }
 
 
@@ -100,6 +112,7 @@ public class PivotRotation : MonoBehaviour {
             readCube.ReadState();
 
             autoRotating = false;
+            cubeState.autoRotating = false;
         }
     }
 

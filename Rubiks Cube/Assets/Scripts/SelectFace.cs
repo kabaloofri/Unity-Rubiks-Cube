@@ -2,28 +2,23 @@ using System.Collections.Generic;
 using Unity.IntegerTime;
 using UnityEngine;
 
-public class SelectFace : MonoBehaviour
-{
+public class SelectFace : MonoBehaviour {
     [SerializeField] LayerMask whatIsFaces;
     CubeState cubeState;
     ReadCube readCube;
 
-    void Start()
-    {
+    void Start() {
         cubeState = FindFirstObjectByType<CubeState>();
         readCube = FindFirstObjectByType<ReadCube>();
     }
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
+    void Update() {
+        if (Input.GetMouseButtonDown(0)) {
             readCube.ReadState();
 
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit, 100f, whatIsFaces))
-            {
+            if (Physics.Raycast(ray, out hit, 100f, whatIsFaces)) {
 
                 GameObject face = hit.collider.gameObject;
 
@@ -38,12 +33,11 @@ public class SelectFace : MonoBehaviour
                 };
 
                 //if the face exsist
-                foreach (var cubeSide in cubeSides)
-                {
-                    if (cubeSide.Contains(face))
-                    {
-                        //pick it up
+                foreach (var cubeSide in cubeSides) {
+                    if (cubeSide.Contains(face)) {
                         cubeState.PickUp(cubeSide);
+                        //rotate the center piece
+                        cubeSide[4].transform.parent.GetComponent<PivotRotation>().Rotate(cubeSide);
                     }
                 }
             }

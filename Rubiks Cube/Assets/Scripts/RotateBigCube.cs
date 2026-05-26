@@ -2,8 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-public class RotateBigCube : MonoBehaviour
-{
+public class RotateBigCube : MonoBehaviour {
     [SerializeField] private Transform target;
     [SerializeField] private float speed = 200f;
     private Vector2 firstSwipePos;
@@ -14,18 +13,15 @@ public class RotateBigCube : MonoBehaviour
     private Vector3 mouseDelta;
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         Swipe();
-        
+
         Drag();
     }
 
-    void Drag()
-    {
+    void Drag() {
         //hold cube and stuff
-        if (Input.GetMouseButton(1))
-        {
+        if (Input.GetMouseButton(1)) {
             mouseDelta = Input.mousePosition - prevMousePos;
             mouseDelta *= 0.1f;
 
@@ -33,25 +29,20 @@ public class RotateBigCube : MonoBehaviour
 
         }
         //rotate smooth to target
-        else
-        {
-            if (transform.rotation != target.rotation)
-            {
+        else {
+            if (transform.rotation != target.rotation) {
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, target.rotation, speed * Time.deltaTime);
             }
         }
         prevMousePos = Input.mousePosition;
     }
 
-    void Swipe()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
+    void Swipe() {
+        if (Input.GetMouseButtonDown(1)) {
             //get screan pos of click
             firstSwipePos = Input.mousePosition;
         }
-        if (Input.GetMouseButtonUp(1))
-        {
+        if (Input.GetMouseButtonUp(1)) {
             secondSwipePos = Input.mousePosition;
 
             //create vector from first and second pos
@@ -59,61 +50,43 @@ public class RotateBigCube : MonoBehaviour
             currentSwipe = firstSwipePos - secondSwipePos;
             currentSwipe.Normalize();
 
-            if (LeftSwipe())
-            {
+            if (LeftSwipe()) {
                 target.Rotate(0, -90, 0, Space.World);
-            }
-
-            else if (RightSwipe())
-            {
+            } else if (RightSwipe()) {
                 target.Rotate(0, 90, 0, Space.World);
-            }
-            else if (UpLeftSwipe())
-            {
+            } else if (UpLeftSwipe()) {
                 target.Rotate(-90, 0, 0, Space.World);
-            }
-            else if (UpRightSwipe())
-            {
+            } else if (UpRightSwipe()) {
                 target.Rotate(0, 0, 90, Space.World);
-            }
-            else if (DownLeftSwipe())
-            {
+            } else if (DownLeftSwipe()) {
                 target.Rotate(0, 0, -90, Space.World);
-            }
-            else if (DownRightSwipe())
-            {
+            } else if (DownRightSwipe()) {
                 target.Rotate(90, 0, 0, Space.World);
             }
         }
     }
 
-    bool LeftSwipe()
-    {
+    bool LeftSwipe() {
         return currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f;
     }
 
-    bool RightSwipe()
-    {
+    bool RightSwipe() {
         return currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f;
     }
 
-    bool UpLeftSwipe()
-    {
+    bool UpLeftSwipe() {
         return currentSwipe.y > 0 && currentSwipe.x < 0;
     }
 
-    bool UpRightSwipe()
-    {
+    bool UpRightSwipe() {
         return currentSwipe.y > 0 && currentSwipe.x > 0;
     }
 
-    bool DownLeftSwipe()
-    {
+    bool DownLeftSwipe() {
         return currentSwipe.y < 0 && currentSwipe.x < 0;
     }
 
-    bool DownRightSwipe()
-    {
+    bool DownRightSwipe() {
         return currentSwipe.y < 0 && currentSwipe.x > 0;
     }
 }
